@@ -1,5 +1,5 @@
-# GameOfLife-Riot
-Coding Sample for an interview with Riot Games
+# GameOfLife
+Interviewing Coding Sample
 
 
 ## Requirements
