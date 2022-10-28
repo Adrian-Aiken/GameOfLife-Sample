@@ -27,8 +27,10 @@ By default, a 16x16 SuperCell grid is used, and every generation is printed. To 
 * SuperCell grid size can be changed in `supercell.h` on line 6, altering `BITSET_SIZE`
 * Generation printing frequency can be cahnged in `gameoflife.cpp` on line 11, altering `PRINTED_GEN` to the number of generations to simulate before printing the board state again
 
+---
 
 ## Example run
+```
 ******************************************************************
 GEN 1
 ******************************************************************
@@ -178,3 +180,4 @@ O.O.............
 ******************************************************************
 GEN 3
 ******************************************************************
+```
