@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define PRINTED_GEN 100
+#define PRINTED_GEN 1
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // Open and parse test file
     ifstream inputFile;
     inputFile.open(argv[1]);
 
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
         bm.setCell(x, y);
     }
     
+    // Generation count
     int c = 0;
     string s;
     while(true) 

@@ -8,7 +8,6 @@
 
 BoardManager::BoardManager()
 {
-
 }
 
 bool BoardManager::superCellExists(int64_t x, int64_t y)
@@ -26,14 +25,17 @@ void BoardManager::openSuperCell(int64_t x, int64_t y)
 
 void BoardManager::setCell(int64_t x, int64_t y)
 {
+    // Translates x/y into SuperCell's x/y
     auto metaX = x/BITSET_SIZE;
     auto metaY = y/BITSET_SIZE;
 
+    // Adjustment for negative values
     if (x < 0) metaX--;
     if (y < 0) metaY--;
     
     openSuperCell(metaX, metaY);
 
+    // Converts global x/y to local (to the supercell) x/y
     auto localX = x%BITSET_SIZE;
     auto localY = y%BITSET_SIZE;
 

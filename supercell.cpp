@@ -15,6 +15,7 @@ SuperCell::SuperCell(int64_t x, int64_t y, BoardManager* boardManager)
 
     board = std::make_unique<std::vector<BOARD_ROW>>();
     
+    // Initialization
     for (int i = 0; i < BITSET_SIZE; i++)
     {
         board->push_back(std::make_unique<std::bitset<BITSET_SIZE>>());
@@ -28,18 +29,49 @@ void SuperCell::setCell(int64_t x, int64_t y, bool alive)
 
 void SuperCell::commitStep()
 {
+    // Promotes next gen to the current board
     board.reset();
     board = std::move(nextGen);
 }
 
 void SuperCell::simulateStep()
 {
-    // Create Neighbor board
+    /********************************************************************************
+     * The main simulation done in a few steps:
+     * 1) Generate a 2d grid of living neighbors, corresponding to each cell in this
+     *    SuperCell's grid
+     * 2) Add in the neighbors from neighboring SuperCells for this SuperCell's edges
+     * 3) Using the neighbor map, generate the next generation map based on the 
+     *    Game of Life rules (3 neighbors for dead cells = living, 2/3 neighbors
+     *    for living cells = living)
+     ********************************************************************************/
+
     std::vector<std::vector<int_fast16_t>> nBoard;
     for (int i = 0; i < BITSET_SIZE; i++)
     {
         nBoard.push_back(std::vector<int_fast16_t>(BITSET_SIZE, 0));
+    }    
+
+    // Generate neighbor counts for the current generation
+    for (int x = 0; x < BITSET_SIZE; x++)
+    for (int y = 0; y < BITSET_SIZE; y++)
+    {
+        if (board->at(x)->test(y)) {
+            for (int i = -1; i <= 1; i++)
+            for (int j = -1; j <= 1; j++)
+            {
+                if (i == 0 && j == 0) continue; // skip current cell
+                if (0 <= (x+i) && (x+i) < BITSET_SIZE && 0 <= (y+j) && (y+j) < BITSET_SIZE)
+                {
+                    nBoard[x+i][y+j]++;
+                }                    
+            }
+        }
     }
+
+    ///////
+    // Edge neighbors
+    ///////
 
     // Top edge neighbors
     auto top = boardManager->getEdge(coordX+1, coordY, CellEdge::bottom);
@@ -93,46 +125,37 @@ void SuperCell::simulateStep()
         }
     }
 
+    ///////
     // Corner neighbors
-    //lowerleft
+    ///////
+
+    // Lower Left
     if (boardManager->getCorner(coordX-1, coordY-1, CellCorner::upperRight))
     {
         nBoard[0][0]++;
     }
-    //lowerright
+
+    // Lower Right
     if (boardManager->getCorner(coordX-1, coordY+1, CellCorner::upperLeft))
     {
         nBoard[0][BITSET_SIZE-1]++;
     }
-    //upperleft
+
+    // Upper Left
     if (boardManager->getCorner(coordX+1, coordY-1, CellCorner::lowerRight))
     {
         nBoard[BITSET_SIZE-1][0]++;
     }
-    //upperright
+
+    // Upper Right
     if (boardManager->getCorner(coordX+1, coordY+1, CellCorner::lowerLeft))
     {
         nBoard[BITSET_SIZE-1][BITSET_SIZE-1]++;
     }
 
-    // Add up neighbor counts
-    for (int x = 0; x < BITSET_SIZE; x++)
-    for (int y = 0; y < BITSET_SIZE; y++)
-    {
-        if (board->at(x)->test(y)) {
-            for (int i = -1; i <= 1; i++)
-            for (int j = -1; j <= 1; j++)
-            {
-                if (i == 0 && j == 0) continue; // skip current cell
-                if (0 <= (x+i) && (x+i) < BITSET_SIZE && 0 <= (y+j) && (y+j) < BITSET_SIZE)
-                {
-                    nBoard[x+i][y+j]++;
-                }                    
-            }
-        }
-    }
-    
-    // Prepare empty board
+    ///////
+    // Prepare next generation's grid
+    ///////
     nextGen = std::make_unique<std::vector<BOARD_ROW>>();    
     for (int i = 0; i < BITSET_SIZE; i++)
     {
@@ -161,7 +184,6 @@ void SuperCell::simulateStep()
         }
     }
 }
-
 
 std::bitset<BITSET_SIZE> SuperCell::getEdge(CellEdge edge)
 {

@@ -16,7 +16,7 @@ Coding Sample for an interview with Riot Games
 [x] Adjacent cell generation
 [x] Empty cell removal
 [x] Fix extreme large number parse
-[ ] Fix through any TODOs
-[ ] Add commenting
+[x] Fix through any TODOs
+[ ] Commenting and code cleanup
 
 Note: Basically complete, just needs cleaning
