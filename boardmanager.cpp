@@ -27,20 +27,28 @@ void BoardManager::setCell(int64_t x, int64_t y)
 {
     // Translates x/y into SuperCell's x/y
     auto metaX = x/BITSET_SIZE;
-    auto metaY = y/BITSET_SIZE;
-
-    // Adjustment for negative values
-    if (x < 0) metaX--;
-    if (y < 0) metaY--;
-    
-    openSuperCell(metaX, metaY);
+    auto metaY = y/BITSET_SIZE;    
 
     // Converts global x/y to local (to the supercell) x/y
     auto localX = x%BITSET_SIZE;
     auto localY = y%BITSET_SIZE;
 
-    if (localX < 0) localX += BITSET_SIZE;
-    if (localY < 0) localY += BITSET_SIZE;
+    // Adjustment for negative values
+    if (x < 0)
+    {
+        metaX--;
+        localX -= 1;
+        if (localX < 0) localX += BITSET_SIZE;
+    }
+    if (y < 0)
+    {
+        metaY--;
+        localY -= 1;
+        if (localY < 0) localY += BITSET_SIZE;
+    }
+
+    openSuperCell(metaX, metaY);
+
 
     boardPieces[std::make_pair(metaX, metaY)]->setCell(localX, localY);
 }
@@ -57,7 +65,7 @@ void BoardManager::printBoard()
             auto row = scell->board->at(i).get();
             for (int j = 0; j < BITSET_SIZE; j++)
             {
-                std::cout << (row->test(j) ? "■" : ".");
+                std::cout << (row->test(j) ? "O" : ".");
             }
             std::cout << std::endl;
         }
@@ -113,15 +121,6 @@ void BoardManager::simulateStep()
     for (auto const& piece : boardPieces)
     {
         piece.second->commitStep();
-    }
-
-    // Remove supercells that are now empty
-    for (auto it = begin(boardPieces); it != end(boardPieces); it++)
-    {
-        if (it->second->isEmpty())
-        {
-            boardPieces.erase(it++);
-        }
     }
 }
 

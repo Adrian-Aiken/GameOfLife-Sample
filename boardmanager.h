@@ -4,6 +4,8 @@
 #include <map>
 #include <memory>
 
+#include "supercell.h"
+
 class SuperCell;
 
 class BoardManager

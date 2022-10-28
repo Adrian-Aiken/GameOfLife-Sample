@@ -3,12 +3,12 @@
 #include <sstream>
 #include <bitset>
 
-#include "supercell.cpp"
-#include "boardmanager.cpp"
+#include "supercell.h"
+#include "boardmanager.h"
 
 using namespace std;
 
-#define PRINTED_GEN 1
+#define PRINTED_GEN 30
 
 int main(int argc, char *argv[])
 {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     string s;
     while(true) 
     {    
-        if (++c % PRINTED_GEN == 0) {    
+        if (c++ % PRINTED_GEN == 0) {    
             cout << endl << endl << "******************************************************************" << endl
                 << "GEN " << c << endl
                 << "******************************************************************" << endl;

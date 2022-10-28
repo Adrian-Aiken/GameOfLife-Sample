@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "supercell.h"
-#include "boardmanager.cpp"
+#include "boardmanager.h"
 
 SuperCell::SuperCell(int64_t x, int64_t y, BoardManager* boardManager)
 {
