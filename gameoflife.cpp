@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define PRINTED_GEN 30
+#define PRINTED_GEN 1
 
 int main(int argc, char *argv[])
 {

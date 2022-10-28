@@ -6,7 +6,7 @@
 
 class BoardManager;
 
-#define BITSET_SIZE 64
+#define BITSET_SIZE 16
 
 enum CellEdge { top, bottom, left, right };
 enum CellCorner { upperLeft, upperRight, lowerLeft, lowerRight };
